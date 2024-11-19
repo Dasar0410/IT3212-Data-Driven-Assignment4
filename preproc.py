@@ -7,18 +7,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import LabelEncoder
 
-def one_hot_encode(df):
-    df_encoded = pd.get_dummies(df, columns=['sex', 'SMK_stat_type_cd']).astype(int)
-
-    # Rename columns to more fitting names
-    df_encoded.rename(columns={
-        'SMK_stat_type_cd_1.0': 'Smoking_Never',
-        'SMK_stat_type_cd_2.0': 'Smoking_Former',
-        'SMK_stat_type_cd_3.0': 'Smoking_Current'
-    }, inplace=True)
-
-    return df_encoded
-
 def label_encode_target(df):
     # Convert 'DRK_YN' to 0 or 1
     df['DRK_YN'] = df['DRK_YN'].map({'N': 0, 'Y': 1})
@@ -32,10 +20,28 @@ def label_encode_target(df):
 
     return df
 
-def split_dataset(df):
-    pass
+def one_hot_encode(df):
+    df_encoded = pd.get_dummies(df, columns=['sex', 'SMK_stat_type_cd']).astype(int)
 
-def target_encode(X_train, X_test, y_train, cat_cols):
+    # Rename columns to more fitting names
+    df_encoded.rename(columns={
+        'SMK_stat_type_cd_1.0': 'Smoking_Never',
+        'SMK_stat_type_cd_2.0': 'Smoking_Former',
+        'SMK_stat_type_cd_3.0': 'Smoking_Current'
+    }, inplace=True)
+
+    return df_encoded
+
+
+
+def split_dataset(df):
+    x = df.drop('DRK_YN','Smoking_Never','Smoking_Former','Smoking_Current', axis=1)
+    y = df['DRK_YN','Smoking_Never','Smoking_Former','Smoking_Current']
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+    return x_train, x_test, y_train, y_test
+
+def target_encode(x_train, x_test, y_train, cat_cols):
     pass
 
 def handle_outliers(df, outlier_columns, iqr_multiplier):
