@@ -5,6 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import RFE
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import LabelEncoder
 
 def one_hot_encode(df):
     # Convert 'DRK_YN' to 0 or 1
@@ -22,7 +23,14 @@ def one_hot_encode(df):
     return df_encoded
 
 def label_encode_target(df):
-    pass
+    label_encoder = LabelEncoder()
+
+    label_columns = ['hear_left', 'hear_right', 'urine_protein']
+
+    for col in label_columns:
+        df[col] = label_encoder.fit_transform(df[col])
+
+    return df
 
 def split_dataset(df):
     pass
