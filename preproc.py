@@ -6,6 +6,7 @@ from sklearn.feature_selection import RFE
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
 
 def label_encode_target(df):
     # Convert 'DRK_YN' to 0 or 1
@@ -29,25 +30,61 @@ def one_hot_encode(df):
         'SMK_stat_type_cd_2.0': 'Smoking_Former',
         'SMK_stat_type_cd_3.0': 'Smoking_Current'
     }, inplace=True)
-
+    # return as pd dataframe
+    df_encoded = pd.DataFrame(df_encoded)
     return df_encoded
 
-
-
 def split_dataset(df):
-    x = df.drop('DRK_YN','Smoking_Never','Smoking_Former','Smoking_Current', axis=1)
-    y = df['DRK_YN','Smoking_Never','Smoking_Former','Smoking_Current']
+    x = df.drop(['DRK_YN', 'Smoking_Never', 'Smoking_Former', 'Smoking_Current'], axis=1)
+    y = df['DRK_YN']
+    # Handle outliers before splitting the dataset but after dividing the target and features
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-
+    
     return x_train, x_test, y_train, y_test
 
-def target_encode(x_train, x_test, y_train, cat_cols):
-    pass
+def handle_outliers(df):
+    # Identify all numerical columns for outlier detection
+    outlier_columns = [
+        'height', 'weight', 'waistline', 
+        'SBP', 'DBP', 'BLDS', 
+        'tot_chole', 'HDL_chole', 'LDL_chole', 
+        'triglyceride', 'hemoglobin', 
+        'serum_creatinine', 'SGOT_AST', 'SGOT_ALT', 'gamma_GTP'
+    ]
+    # Set the IQR multiplier (adjust for stricter outlier detection)
+    iqr_multiplier = 3
+    
+    for col in outlier_columns:
+        lower_bound, upper_bound = calculate_iqr_bounds(df, col, iqr_multiplier)
+        outlier_count = count_outliers(df, col, lower_bound, upper_bound)
+        
+        print(f"Processing '{col}':")
+        print(f"  - Lower Bound: {lower_bound}")
+        print(f"  - Upper Bound: {upper_bound}")
+        print(f"  - Outliers Detected: {outlier_count}")
+        
+        # Remove outliers
+        df = df[(df[col] >= lower_bound) & (df[col] <= upper_bound)]
+        
+    return df
 
-def handle_outliers(df, outlier_columns, iqr_multiplier):
-    pass
+def calculate_iqr_bounds(df, column, multiplier):
+    """Calculate the IQR bounds for a given column with a specified multiplier."""
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - multiplier * IQR
+    upper_bound = Q3 + multiplier * IQR
+    return lower_bound, upper_bound
+
+def count_outliers(df, column, lower_bound, upper_bound):
+    """Count the number of outliers in a column based on IQR bounds."""
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    return len(outliers)
+    
 
 def perform_rfe(X_train, y_train, n_features_to_select):
+
     pass
 
 def perform_lda(X_train_selected, y_train, n_components):
