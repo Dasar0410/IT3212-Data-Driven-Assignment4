@@ -8,9 +8,6 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import LabelEncoder
 
 def one_hot_encode(df):
-    # Convert 'DRK_YN' to 0 or 1
-    df['DRK_YN'] = df['DRK_YN'].map({'N': 0, 'Y': 1})
-
     df_encoded = pd.get_dummies(df, columns=['sex', 'SMK_stat_type_cd']).astype(int)
 
     # Rename columns to more fitting names
@@ -23,8 +20,11 @@ def one_hot_encode(df):
     return df_encoded
 
 def label_encode_target(df):
-    label_encoder = LabelEncoder()
+    # Convert 'DRK_YN' to 0 or 1
+    df['DRK_YN'] = df['DRK_YN'].map({'N': 0, 'Y': 1})
 
+    label_encoder = LabelEncoder()
+    
     label_columns = ['hear_left', 'hear_right', 'urine_protein']
 
     for col in label_columns:
