@@ -8,9 +8,12 @@ def main():
     # Load the csv data
     df = pd.read_csv('smoking_driking_dataset_Ver01.csv')
     
-    df = preproc.process_data(data)
+    df = preproc.one_hot_encode(df)
+
+    #save dataset to file
+    df.to_csv('smoking_driking_dataset_Ver01_encoded.csv', index=False)
     
-    print("Processed Data:", processed_data)
+    
 
 if __name__ == "__main__":
     main()

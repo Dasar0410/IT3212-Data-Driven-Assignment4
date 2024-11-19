@@ -7,7 +7,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 
 def one_hot_encode(df):
-    pass
+    df_encoded = pd.get_dummies(df, columns=['sex', 'SMK_stat_type_cd', 'DRK_YN']).astype(int)
+    return df_encoded
 
 def label_encode_target(df):
     pass
