@@ -7,6 +7,9 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 
 def one_hot_encode(df):
+    # Convert 'DRK_YN' to 0 or 1
+    df['DRK_YN'] = df['DRK_YN'].map({'N': 0, 'Y': 1})
+
     df_encoded = pd.get_dummies(df, columns=['sex', 'SMK_stat_type_cd']).astype(int)
 
     # Rename columns to more fitting names
@@ -15,10 +18,6 @@ def one_hot_encode(df):
         'SMK_stat_type_cd_2.0': 'Smoking_Former',
         'SMK_stat_type_cd_3.0': 'Smoking_Current'
     }, inplace=True)
-
-     # Convert 'DRK_YN' to 0 or 1 from true or false
-    df_encoded['DRK_YN'] = df_encoded['DRK_YN'].map({'N': 0, 'Y': 1})
-
 
     return df_encoded
 
