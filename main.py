@@ -18,8 +18,9 @@ def main():
     df.to_csv('smoking_driking_dataset_Ver01_encoded.csv', index=False)
     #check df after outlier removal with pyplot and set maximum y value to 6000 for plt.show
     plt.boxplot(df)
-    #print amount of lines in dataset after outlier removal'
-    print(df.shape[0])
+ 
+    # Split the dataset
+    x_train, x_test, y_train, y_test = preproc.split_dataset(df)
 
 
     
