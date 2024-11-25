@@ -37,10 +37,9 @@ def one_hot_encode(df):
 def split_dataset(df):
     x = df.drop(['DRK_YN', 'Smoking_Never', 'Smoking_Former', 'Smoking_Current'], axis=1)
     y = df['DRK_YN']
-    # Handle outliers before splitting the dataset but after dividing the target and features
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
     
-    return x_train, x_test, y_train, y_test
+    return x, y
 
 def handle_outliers(df):
     # Identify all numerical columns for outlier detection
@@ -82,42 +81,33 @@ def count_outliers(df, column, lower_bound, upper_bound):
     outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
     return len(outliers)
     
-def min_max_scale(X_train_selected, X_test_selected):
+def min_max_scale(x):
     # Initialize the MinMaxScaler
     scaler = MinMaxScaler()
     
     # Fit the scaler on the training data and transform both training and testing data
-    X_train_scaled = scaler.fit_transform(X_train_selected)
-    X_test_scaled = scaler.transform(X_test_selected)
+    x_scaled = scaler.fit_transform(x)
     
     # Convert back to DataFrame to retain column names and indices
-    X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train_selected.columns, index=X_train_selected.index)
-    X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test_selected.columns, index=X_test_selected.index)
-    
-    # Debugging: Print the range of scaled values
-    print("Training Data Range After Scaling:")
-    print("Min:\n", X_train_scaled.min())
-    print("Max:\n", X_train_scaled.max())
+    x_scaled = pd.DataFrame(x_scaled, columns=x.columns, index=x.index)
 
-    return X_train_scaled, X_test_scaled
+    return x_scaled
 
-def perform_rfe(X_train, X_test, y_train, n_features_to_select):
+def perform_rfe(x, y, n_features_to_select):
     #RFE AND LDA
     # Create an estimator to be used by RFE
     estimator = LogisticRegression(max_iter=2000)
     rfe = RFE(estimator, n_features_to_select=n_features_to_select)
-    rfe.fit(X_train, y_train)
+    rfe.fit(x, y)
     # Select the features that RFE gets
-    X_train_selected = rfe.transform(X_train)
-    X_test_selected = rfe.transform(X_test)
-    return X_train_selected, X_test_selected
+    x = rfe.transform(x)
+    return x
 
-def perform_pca(X_train_scaled, X_test_scaled, n_components):
+def perform_pca(x, n_components):
     # Initialize PCA with the specified number of components
     pca = PCA(n_components=n_components)
     
     # Fit PCA on the training data and transform both training and testing data
-    X_train_pca = pca.fit_transform(X_train_scaled)
-    X_test_pca = pca.transform(X_test_scaled)
+    x_pca = pca.fit_transform(x)
     
-    return X_train_pca, X_test_pca
+    return x_pca

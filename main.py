@@ -20,24 +20,23 @@ def main():
     plt.boxplot(df)
  
     # Split the dataset
-    x_train, x_test, y_train, y_test = preproc.split_dataset(df)
+    x, y = preproc.split_dataset(df)
 
     # Min-Max scaling
-    x_train, x_test = preproc.min_max_scale(x_train, x_test)
+    x = preproc.min_max_scale(x)
 
     # RFE
-    x_train, x_test = preproc.perform_rfe(x_train, x_test, y_train, 15)
+    x = preproc.perform_rfe(x, y, 15)
 
     # save x_test and train as csv
-    pd.DataFrame(x_train).to_csv('x_train.csv', index=False)
-    pd.DataFrame(x_test).to_csv('x_test.csv', index=False)
+    #pd.DataFrame(x_train).to_csv('x_train.csv', index=False)
+    #pd.DataFrame(x_test).to_csv('x_test.csv', index=False)
 
     # pca
-    x_train, x_test = preproc.perform_pca(x_train, x_test, 15)
+    x = preproc.perform_pca(x, 15)
   
-    
-    #save dataset to file
-    
+
+
     
     
 
