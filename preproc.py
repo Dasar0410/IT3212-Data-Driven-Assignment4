@@ -120,8 +120,4 @@ def perform_pca(X_train_scaled, X_test_scaled, n_components):
     X_train_pca = pca.fit_transform(X_train_scaled)
     X_test_pca = pca.transform(X_test_scaled)
     
-    # Convert PCA-transformed data back to DataFrame for interpretability
-    X_train_pca = pd.DataFrame(X_train_pca, index=X_train_scaled.index)
-    X_test_pca = pd.DataFrame(X_test_pca, index=X_test_scaled.index)
-    
     return X_train_pca, X_test_pca
