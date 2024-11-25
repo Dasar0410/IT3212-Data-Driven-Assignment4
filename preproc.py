@@ -94,7 +94,7 @@ def min_max_scale(X_train_selected, X_test_selected):
     X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train_selected.columns, index=X_train_selected.index)
     X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test_selected.columns, index=X_test_selected.index)
     
-        # Debugging: Print the range of scaled values
+    # Debugging: Print the range of scaled values
     print("Training Data Range After Scaling:")
     print("Min:\n", X_train_scaled.min())
     print("Max:\n", X_train_scaled.max())
