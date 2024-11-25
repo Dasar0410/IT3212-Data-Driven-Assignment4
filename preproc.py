@@ -112,8 +112,19 @@ def perform_rfe(X_train, X_test, y_train, n_features_to_select):
     X_test_selected = rfe.transform(X_test)
     return X_train_selected, X_test_selected
 
-def perform_lda(X_train_selected, y_train, n_components):
-    pass
-
 def perform_pca(X_train_scaled, X_test_scaled, n_components):
-    pass
+    # Initialize PCA with the specified number of components
+    pca = PCA(n_components=n_components)
+    
+    # Fit PCA on the training data and transform both training and testing data
+    X_train_pca = pca.fit_transform(X_train_scaled)
+    X_test_pca = pca.transform(X_test_scaled)
+    
+    # Convert PCA-transformed data back to DataFrame for interpretability
+    X_train_pca = pd.DataFrame(X_train_pca, index=X_train_scaled.index)
+    X_test_pca = pd.DataFrame(X_test_pca, index=X_test_scaled.index)
+    
+    # Get explained variance ratio
+    explained_variance = pca.explained_variance_ratio_
+    
+    return X_train_pca, X_test_pca, explained_variance
