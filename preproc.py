@@ -83,9 +83,16 @@ def count_outliers(df, column, lower_bound, upper_bound):
     return len(outliers)
     
 
-def perform_rfe(X_train, y_train, n_features_to_select):
-    
-    pass
+def perform_rfe(X_train, X_test, y_train, n_features_to_select):
+    #RFE AND LDA
+    # Create an estimator to be used by RFE
+    estimator = LogisticRegression(max_iter=2000)
+    rfe = RFE(estimator, n_features_to_select=n_features_to_select)
+    rfe.fit(X_train, y_train)
+    # Select the features that RFE gets
+    X_train_selected = rfe.transform(X_train)
+    X_test_selected = rfe.transform(X_test)
+    return X_train_selected, X_test_selected
 
 def perform_lda(X_train_selected, y_train, n_components):
     pass
