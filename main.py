@@ -32,10 +32,10 @@ def main():
     pd.DataFrame(x_train).to_csv('x_train.csv', index=False)
     pd.DataFrame(x_test).to_csv('x_test.csv', index=False)
 
-
-    # Outlier handling
+    # pca
+    x_train, x_test = preproc.perform_pca(x_train, x_test, 15)
   
-
+    
     #save dataset to file
     
     
