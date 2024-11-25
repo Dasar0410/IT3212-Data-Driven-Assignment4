@@ -28,19 +28,10 @@ def main():
     # RFE
     x_train, x_test = preproc.perform_rfe(x_train, x_test, y_train, 15)
 
+    # save x_test and train as csv
+    pd.DataFrame(x_train).to_csv('x_train.csv', index=False)
+    pd.DataFrame(x_test).to_csv('x_test.csv', index=False)
 
-
-    
-    
-
-
-
-    x_train, x_test, y_train, y_test = preproc.split_dataset(df)
-    #save train and test dataset to file
-    x_train.to_csv('x_train.csv', index=False)
-    x_test.to_csv('x_test.csv', index=False)
-    y_train.to_csv('y_train.csv', index=False)
-    y_test.to_csv('y_test.csv', index=False)
 
     # Outlier handling
   

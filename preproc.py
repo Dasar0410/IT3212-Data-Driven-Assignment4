@@ -98,10 +98,6 @@ def min_max_scale(X_train_selected, X_test_selected):
     print("Training Data Range After Scaling:")
     print("Min:\n", X_train_scaled.min())
     print("Max:\n", X_train_scaled.max())
-    
-    print("\nTesting Data Range After Scaling:")
-    print("Min:\n", X_test_scaled.min())
-    print("Max:\n", X_test_scaled.max())
 
     return X_train_scaled, X_test_scaled
 
