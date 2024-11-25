@@ -82,6 +82,28 @@ def count_outliers(df, column, lower_bound, upper_bound):
     outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
     return len(outliers)
     
+def min_max_scale(X_train_selected, X_test_selected):
+    # Initialize the MinMaxScaler
+    scaler = MinMaxScaler()
+    
+    # Fit the scaler on the training data and transform both training and testing data
+    X_train_scaled = scaler.fit_transform(X_train_selected)
+    X_test_scaled = scaler.transform(X_test_selected)
+    
+    # Convert back to DataFrame to retain column names and indices
+    X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train_selected.columns, index=X_train_selected.index)
+    X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test_selected.columns, index=X_test_selected.index)
+    
+    # Debugging: Print the range of scaled values
+    print("Training Data Range After Scaling:")
+    print("Min:\n", X_train_scaled.min())
+    print("Max:\n", X_train_scaled.max())
+    
+    print("\nTesting Data Range After Scaling:")
+    print("Min:\n", X_test_scaled.min())
+    print("Max:\n", X_test_scaled.max())
+
+    return X_train_scaled, X_test_scaled
 
 def perform_rfe(X_train, X_test, y_train, n_features_to_select):
     #RFE AND LDA
@@ -95,9 +117,6 @@ def perform_rfe(X_train, X_test, y_train, n_features_to_select):
     return X_train_selected, X_test_selected
 
 def perform_lda(X_train_selected, y_train, n_components):
-    pass
-
-def min_max_scale(X_train_selected, X_test_selected):
     pass
 
 def perform_pca(X_train_scaled, X_test_scaled, n_components):
