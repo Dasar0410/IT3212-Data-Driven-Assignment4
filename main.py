@@ -22,8 +22,12 @@ def main():
     # Split the dataset
     x_train, x_test, y_train, y_test = preproc.split_dataset(df)
 
+    # Min-Max scaling
+    x_train, x_test = preproc.min_max_scale(x_train, x_test)
+
     # RFE
     x_train, x_test = preproc.perform_rfe(x_train, x_test, y_train, 15)
+
 
 
     
